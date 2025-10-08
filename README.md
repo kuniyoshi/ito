@@ -1,9 +1,9 @@
 ITO
 ===
 
-`ito` is a tiny file manager.
+`ito` is a very tiny file manager.
 
-`ito` probides just file paths in a specific directory.
+`ito` probides file paths in a specific directory.
 
 USAGE
 =====
@@ -20,5 +20,12 @@ baz
 $ ls $(ito foo)
 ~/.ito/foo
 ```
+
+PHILOSOPHY
+==========
+
+`ito` is almost like `alias ito ls ~/.ito`.
+
+Small degree of freedom makes users on focus it's task.
 
 
