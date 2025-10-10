@@ -19,7 +19,15 @@ func run(args []string) int {
 		return 1
 	}
 
-	if len(args) == 0 || args[0] == "--help" || args[0] == "-h" {
+	if len(args) == 0 {
+		if err := listEntries(root); err != nil {
+			fmt.Fprintf(os.Stderr, "ito: %v\n", err)
+			return 1
+		}
+		return 0
+	}
+
+	if args[0] == "--help" || args[0] == "-h" {
 		printUsage()
 		return 0
 	}
@@ -36,7 +44,7 @@ func run(args []string) int {
 		}
 	default:
 		if len(args) > 1 {
-			fmt.Fprintf(os.Stderr, "ito: 不明なサブコマンド: %q\n", args[1])
+			fmt.Fprintf(os.Stderr, "ito: 余計な引数があります: %q\n", args[1:])
 			return 1
 		}
 		path, err := resolveEntry(root, args[0])
