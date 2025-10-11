@@ -12,7 +12,7 @@ build: fmt vet staticcheck $(BIN)
 
 $(BIN):
 	@mkdir -p $(dir $@)
-	$(GOENV) $(GO) build -o $@ ./cmd/ito
+	$(GOENV) $(GO) build -o $@ .
 
 fmt:
 	$(GOENV) $(GO) fmt ./...
