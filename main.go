@@ -112,7 +112,11 @@ func listEntries(root string) error {
 
 	names := make([]string, 0, len(dirEntries))
 	for _, entry := range dirEntries {
-		names = append(names, entry.Name())
+		name := entry.Name()
+		if strings.HasPrefix(name, ".") {
+			continue
+		}
+		names = append(names, name)
 	}
 	sort.Strings(names)
 
