@@ -19,6 +19,12 @@ bar
 baz
 $ ls $(ito foo)
 ~/.ito/foo
+
+# change the root directory
+$ export ITO_ROOT=~/projects/shortcuts
+$ ito list
+project-a
+project-b
 ```
 
 PHILOSOPHY
@@ -29,3 +35,7 @@ PHILOSOPHY
 Its deliberately tiny feature set helps you stay focused on the task at hand
 and remember what each file is for.
 
+CONFIGURATION
+=============
+
+- `ITO_ROOT` (optional): Override the default root directory (`~/.ito`).

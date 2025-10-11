@@ -6,7 +6,10 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 )
+
+const rootEnvVar = "ITO_ROOT"
 
 func main() {
 	os.Exit(run(os.Args[1:]))
@@ -58,19 +61,44 @@ func run(args []string) int {
 }
 
 func printUsage() {
-	fmt.Println(`ito は ~/.ito 以下のエントリへ素早くアクセスするためのコマンドです。
+	fmt.Println(`ito は ~/.ito 以下のエントリへ素早くアクセスするためのコマンドです。環境変数 ITO_ROOT でルートディレクトリを変更できます。
 
 使い方:
-  ito list        ~/.ito 内のエントリを列挙します
+  ito list        ルートディレクトリ内のエントリを列挙します
   ito <entry>     指定したエントリへの絶対パスを出力します`)
 }
 
 func defaultRoot() (string, error) {
+	if override := os.Getenv(rootEnvVar); override != "" {
+		path, err := expandHome(override)
+		if err != nil {
+			return "", fmt.Errorf("環境変数 %s を解決できません: %w", rootEnvVar, err)
+		}
+		return filepath.Clean(path), nil
+	}
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("ホームディレクトリを取得できません: %w", err)
 	}
 	return filepath.Join(home, ".ito"), nil
+}
+
+func expandHome(path string) (string, error) {
+	if path == "~" {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return "", err
+		}
+		return home, nil
+	}
+	if strings.HasPrefix(path, "~/") || strings.HasPrefix(path, "~\\") {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join(home, path[2:]), nil
+	}
+	return path, nil
 }
 
 func listEntries(root string) error {
