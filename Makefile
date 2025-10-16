@@ -3,6 +3,7 @@ STATICCHECK ?= staticcheck
 GOCACHE ?= $(CURDIR)/.gocache
 GOMODCACHE ?= $(CURDIR)/.modcache
 BIN := $(CURDIR)/bin/ito
+SRC := $(shell find . -name '*.go' -not -path './.gocache/*' -not -path './.modcache/*' -not -path './bin/*')
 
 GOENV := GOCACHE=$(GOCACHE) GOMODCACHE=$(GOMODCACHE)
 
@@ -10,7 +11,7 @@ GOENV := GOCACHE=$(GOCACHE) GOMODCACHE=$(GOMODCACHE)
 
 build: fmt vet staticcheck $(BIN)
 
-$(BIN):
+$(BIN): go.mod $(SRC)
 	@mkdir -p $(dir $@)
 	$(GOENV) $(GO) build -o $@ .
 
