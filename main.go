@@ -128,9 +128,10 @@ func listEntries(root string) error {
 
 func resolveEntry(root, name string) (string, error) {
 	path := filepath.Join(root, name)
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		return "", fmt.Errorf("%s は存在しません", path)
-	} else if err != nil {
+	if _, err := os.Stat(path); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return path, nil
+		}
 		return "", fmt.Errorf("%s を確認できません: %w", path, err)
 	}
 	return path, nil
